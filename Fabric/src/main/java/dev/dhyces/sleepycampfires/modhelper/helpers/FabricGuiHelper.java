@@ -1,4 +1,4 @@
-package dhyces.modhelper.helpers;
+package dev.dhyces.sleepycampfires.modhelper.helpers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.dhyces.sleepycampfires.modhelper.services.helpers.GuiHelper;
@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 
-public class QuiltGuiHelper implements GuiHelper {
+public class FabricGuiHelper implements GuiHelper {
 
     @Override
     public void setupForRender(boolean enableBlend, boolean enableDepth) {

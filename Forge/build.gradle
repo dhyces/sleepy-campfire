@@ -74,13 +74,13 @@ dependencies {
     compileOnly project(":Common")
 }
 
-mixin {
-    add sourceSets.main, 'contextually.refmap.json'
-    config 'contextually.mixins.json'
-
-    debug.verbose = true
-    debug.export = true
-}
+//mixin {
+//    add sourceSets.main, 'sleepycampfires.refmap.json'
+//    config 'sleepycampfires.mixins.json'
+//
+//    debug.verbose = true
+//    debug.export = true
+//}
 
 tasks.withType(JavaCompile) {
     source(project(":Common").sourceSets.main.allSource)

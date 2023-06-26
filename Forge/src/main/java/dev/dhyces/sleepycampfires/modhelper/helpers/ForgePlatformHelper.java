@@ -1,33 +1,40 @@
-package dhyces.modhelper.helpers;
+package dev.dhyces.sleepycampfires.modhelper.helpers;
 
 import dev.dhyces.sleepycampfires.PlayerCampfireTracker;
 import dev.dhyces.sleepycampfires.SleepTracker;
 import dev.dhyces.sleepycampfires.modhelper.services.helpers.PlatformHelper;
-import net.fabricmc.api.EnvType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import org.quiltmc.loader.api.QuiltLoader;
-import org.quiltmc.loader.impl.launch.common.QuiltLauncherBase;
+import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.loading.FMLLoader;
 
-public final class QuiltPlatformHelper implements PlatformHelper {
+import java.util.Optional;
+
+public final class ForgePlatformHelper implements PlatformHelper {
     @Override
     public boolean isModLoaded(String modid) {
-        return QuiltLoader.isModLoaded(modid);
+        return ModList.get().isLoaded(modid);
     }
 
     @Override
     public boolean isClientDist() {
-        return QuiltLauncherBase.getLauncher().getEnvironmentType().equals(EnvType.CLIENT);
+        return FMLLoader.getDist().isClient();
     }
 
     @Override
     public double getPlayerReach(Player player) {
-        return 4;
+        return player.getAttributeValue(ForgeMod.BLOCK_REACH.get());
     }
 
     @Override
     public boolean isValidSleepTime(LivingEntity entity) {
-        return false; // TODO: impl
+        if (entity instanceof Player player) {
+            return ForgeEventFactory.fireSleepingTimeCheck(player, player.getSleepingPos());
+        }
+        return true;
     }
 
     @Override

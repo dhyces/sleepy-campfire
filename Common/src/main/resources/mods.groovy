@@ -5,7 +5,7 @@ ModsDotGroovy.make {
     loaderVersion = "[${(this.buildProperties["forge_version"] as String).split("\\.")[0]},)"
 
     license = "MIT"
-    issueTrackerUrl = ""
+    issueTrackerUrl = "https://example.com"
 
     mod {
         modId = modid
@@ -14,15 +14,15 @@ ModsDotGroovy.make {
         group = this.group
         authors = [this.buildProperties["mod_author"] as String]
 
-        displayUrl = ""
-        sourcesUrl = ""
+        displayUrl = "https://example.com"
+        sourcesUrl = "https://example.com"
         logoFile = "logo.png"
         description = ""
 
         onFabricAndQuilt {
             entrypoints {
-                main = ""
-                client = ""
+                main = "dev.dhyces.sleepycampfires.FabricSleepyCampfires"
+                client = "dev.dhyces.sleepycampfires.FabricSleepyCampfiresClient"
             }
         }
 
@@ -53,7 +53,8 @@ ModsDotGroovy.make {
     onFabricAndQuilt {
         environment = "*"
         mixin = [
-                modid + ".mixins.json"
+                modid + ".mixins.json",
+                modid + ".fabric.mixins.json"
         ]
     }
 }
