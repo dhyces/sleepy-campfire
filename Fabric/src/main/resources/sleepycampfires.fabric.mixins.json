@@ -9,6 +9,8 @@
     "PlayerMixin"
   ],
   "client": [
+    "client.CameraMixin",
+    "client.ChatComponentMixin",
     "client.LivingEntityRendererMixin"
   ],
   "injectors": {
