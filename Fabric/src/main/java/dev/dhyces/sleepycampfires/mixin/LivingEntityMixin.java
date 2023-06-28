@@ -2,28 +2,40 @@ package dev.dhyces.sleepycampfires.mixin;
 
 import dev.dhyces.sleepycampfires.SleepTracker;
 import dev.dhyces.sleepycampfires.SleepyCampfires;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin implements SleepTracker {
+public abstract class LivingEntityMixin extends Entity implements SleepTracker {
+
+    @Shadow public abstract boolean isSleeping();
 
     @Unique
     private BlockState sleepBlock;
+    @Unique
+    private boolean hasStartedSleeping;
+
+    public LivingEntityMixin(EntityType<?> entityType, Level level) {
+        super(entityType, level);
+    }
 
     @Override
     public void setSleptBlock(BlockState block) {
         this.sleepBlock = block;
+        if (block == null) {
+            hasStartedSleeping = false;
+        }
     }
 
     @Override
@@ -39,9 +51,21 @@ public class LivingEntityMixin implements SleepTracker {
     }
 
     @Inject(method = "getEyeHeight", at = @At("HEAD"), cancellable = true)
-    private void sleepycampfire$adjustEyeHeight(Pose pose, EntityDimensions dimensions, CallbackInfoReturnable<Float> cir) {
+    private void sleepycampfires$adjustEyeHeight(Pose pose, EntityDimensions dimensions, CallbackInfoReturnable<Float> cir) {
         if (sleepBlock != null && sleepBlock.is(SleepyCampfires.SLEEPING_CAMPFIRE) && pose == Pose.SITTING) {
             cir.setReturnValue(dimensions.height);
         }
+    }
+
+    @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;setXRot(F)V"))
+    private float sleepycampfires$rotateHead(float originalX) {
+        if (isSleeping() && sleepBlock != null && sleepBlock.is(SleepyCampfires.SLEEPING_CAMPFIRE)) {
+            if (!hasStartedSleeping) {
+                hasStartedSleeping = true;
+                return 0;
+            }
+            return Math.min(getXRot() + 0.25f, 30f);
+        }
+        return originalX;
     }
 }
