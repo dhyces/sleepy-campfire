@@ -26,7 +26,7 @@ public class SleepyCampfires {
 
     public static final EntityDimensions SITTING_AT_CAMPFIRE = new EntityDimensions(0.6f, 0.9f, true);
 
-    public boolean trySleep(Player player, Level level) {
+    public boolean trySleep(Player player, Level level, BlockPos blockPos) {
         if (!Services.PLATFORM_HELPER.isValidSleepTime(player) || !isValidSleepPos(player, Services.PLATFORM_HELPER.getPlayerReach(player))) {
             return false;
         }
@@ -36,7 +36,7 @@ public class SleepyCampfires {
             player.stopRiding();
         }
 
-        player.setSleepingPos(player.blockPosition());
+        player.setSleepingPos(blockPos);
         player.setPose(Pose.SITTING);
         player.refreshDimensions();
         player.setDeltaMovement(Vec3.ZERO);

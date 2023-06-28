@@ -28,7 +28,7 @@ public class ForgeSleepyCampfires extends SleepyCampfires {
 
     private void onCampfireUse(final PlayerInteractEvent.RightClickBlock event) {
         if (event.getLevel().getBlockState(event.getHitVec().getBlockPos()).is(BlockTags.CAMPFIRES)) {
-            if (trySleep(event.getEntity(), event.getLevel())) {
+            if (trySleep(event.getEntity(), event.getLevel(), event.getPos())) {
                 event.getEntity().setForcedPose(Pose.SITTING);
                 event.getEntity().refreshDimensions();
             }

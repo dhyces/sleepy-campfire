@@ -26,7 +26,7 @@ public class FabricSleepyCampfires extends SleepyCampfires implements ModInitial
             BlockState state = world.getBlockState(hitResult.getBlockPos());
             if (state.is(SleepyCampfires.SLEEPING_CAMPFIRE)) {
                 SleepTracker.getFrom(player).setSleptBlock(state);
-                if (trySleep(player, world)) {
+                if (trySleep(player, world, hitResult.getBlockPos())) {
                     return InteractionResult.sidedSuccess(world.isClientSide);
                 }
             }
